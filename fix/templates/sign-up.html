@@ -1,0 +1,268 @@
+{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up | Neighborly</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="{% static 'images/logo.svg' %}" type="image/png" />
+  
+  <!-- Font Awesome CDN -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"rel="stylesheet"/>
+
+  <script src="{% static 'plugin/jquery-3.6.0.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+
+</head>
+<body>
+<section class="auth-section">
+  <div class="auth-container" data-aos="fade-up" data-aos-duration="800">
+
+    <!-- Logo + Heading -->
+    <div class="auth-head">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'images/logo.svg' %}" alt="Logo" class="auth-logo" />
+      </a>
+      <h1 class="auth-title">Sign Up to Neighborly</h1>
+      <p class="auth-subtitle">Join your neighborhood platform — manage complaints and stay updated.</p>
+    </div>
+
+    <!-- Signup Form -->
+    <form method="POST" action="{% url 'signup' %}" class="auth-form" novalidate>
+      {% csrf_token %}
+
+      <div class="grid-item-2 two-column-grid">
+        <div class="form-group">
+          <label for="id_first_name" class="label-class">First Name</label>
+          <input
+            type="text"
+            name="first_name"
+            id="id_first_name"
+            placeholder="Enter First Name"
+            class="input-class"
+            value="{{ form.first_name.value|default_if_none:'' }}"
+          />
+          {% if form.first_name.errors %}
+          <div class="error-message">{{ form.first_name.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="id_last_name" class="label-class">Last Name</label>
+          <input
+            type="text"
+            name="last_name"
+            id="id_last_name"
+            placeholder="Enter Last Name"
+            class="input-class"
+            value="{{ form.last_name.value|default_if_none:'' }}"
+          />
+          {% if form.last_name.errors %}
+          <div class="error-message">{{ form.last_name.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="id_username" class="label-class">Username</label>
+        <input
+          type="text"
+          name="username"
+          id="id_username"
+          placeholder="Enter Username"
+          class="input-class"
+          value="{{ form.username.value|default_if_none:'' }}"
+        />
+        {% if form.username.errors %}
+        <div class="error-message">{{ form.username.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="id_email" class="label-class">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="id_email"
+          placeholder="Enter Email"
+          class="input-class"
+          value="{{ form.email.value|default_if_none:'' }}"
+        />
+        {% if form.email.errors %}
+        <div class="error-message">{{ form.email.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="id_apartment_number" class="label-class">Apartment Number</label>
+        <input
+          type="text"
+          name="apartment_number"
+          id="id_apartment_number"
+          placeholder="Enter Apartment Number"
+          class="input-class"
+          value="{{ form.apartment_number.value|default_if_none:'' }}"
+        />
+        {% if form.apartment_number.errors %}
+        <div class="error-message">{{ form.apartment_number.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Password with eye icon -->
+      <div class="form-group password-group">
+        <label for="id_password1" class="label-class">Password</label>
+        <div class="password-wrapper">
+          <input
+            type="password"
+            name="password1"
+            id="id_password1"
+            placeholder="Enter Password"
+            class="input-class"/>
+          <i class="fa-solid fa-eye toggle-password" data-target="id_password1"></i>
+        </div>
+        {% if form.password1.errors %}
+        <div class="error-message">{{ form.password1.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group password-group">
+        <label for="id_password2" class="label-class">Confirm Password</label>
+        <div class="password-wrapper">
+          <input
+            type="password"
+            name="password2"
+            id="id_password2"
+            placeholder="Enter Confirm Password"
+            class="input-class"
+          />
+          <i class="fa-solid fa-eye toggle-password" data-target="id_password2"></i>
+        </div>
+        {% if form.password2.errors %}
+        <div class="error-message">{{ form.password2.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn-auth">Sign Up Now</button>
+      <a href="{% provider_login_url 'google' %}" class="btn-google">Continue with Google</a>
+
+      <div class="form-footer">
+        Already have an account? <a href="{% url 'login' %}">Log In</a>
+      </div>
+    </form>
+
+  </div>
+</section>
+  <link rel="stylesheet" href="{% static 'plugin/aos.css' %}">
+  <script src="{% static 'plugin/aos.js' %}"></script>
+  <script src="{% static 'js/script.js' %}"></script>
+<script>
+  $(document).ready(function () {
+    function showError($inputElem, message) {
+      const $error = $('<div class="error-message"></div>').text(message);
+      $inputElem.closest(".form-group").append($error);
+      $error.css({
+        color: "red",
+        "font-weight": "600",
+        "font-size": "16px",
+        margin: "5px 0px 10px 0px",
+      });
+    }
+
+    $(".auth-form").on("submit", function (e) {
+      e.preventDefault(); // stop form submission for validation
+      $(".error-message").remove(); // clear old errors
+
+      let hasError = false;
+
+      let firstName = $("#id_first_name").val().trim();
+      let lastName = $("#id_last_name").val().trim();
+      let username = $("#id_username").val().trim();
+      let email = $("#id_email").val().trim();
+      let apartment = $("#id_apartment_number").val().trim();
+      let pass1 = $("#id_password1").val();
+      let pass2 = $("#id_password2").val();
+
+      let namePattern = /^[A-Za-z\s'-]+$/;
+      let apartmentPattern = /^[0-9A-Za-z-]+$/;
+      let emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+      if (!firstName) {
+        showError($("#id_first_name"), "First name is required");
+        hasError = true;
+      } else if (!namePattern.test(firstName)) {
+        showError($("#id_first_name"), "First name can only contain letters");
+        hasError = true;
+      }
+
+      if (!lastName) {
+        showError($("#id_last_name"), "Last name is required");
+        hasError = true;
+      } else if (!namePattern.test(lastName)) {
+        showError($("#id_last_name"), "Last name can only contain letters");
+        hasError = true;
+      }
+
+      if (!username) {
+        showError($("#id_username"), "Username is required");
+        hasError = true;
+      }
+
+      if (!email) {
+        showError($("#id_email"), "Email is required");
+        hasError = true;
+      } else if (!emailPattern.test(email)) {
+        showError($("#id_email"), "Enter a valid email address");
+        hasError = true;
+      }
+
+      if (!apartment) {
+        showError($("#id_apartment_number"), "Apartment number is required");
+        hasError = true;
+      } else if (!apartmentPattern.test(apartment)) {
+        showError(
+          $("#id_apartment_number"),
+          "Apartment number can only contain letters/numbers"
+        );
+        hasError = true;
+      }
+
+      if (!pass1) {
+        showError($("#id_password1"), "Password is required");
+        hasError = true;
+      } else if (pass1.length < 8) {
+        showError($("#id_password1"), "Password must be at least 8 characters");
+        hasError = true;
+      }
+
+      if (!pass2) {
+        showError($("#id_password2"), "Please confirm your password");
+        hasError = true;
+      } else if (pass1 !== pass2) {
+        showError($("#id_password2"), "Passwords do not match");
+        hasError = true;
+      }
+
+      if (!hasError) {
+        this.submit();
+      }
+    });
+
+    // Toggle password visibility
+    $(".toggle-password").click(function () {
+      const targetId = $(this).data("target");
+      const input = $("#" + targetId);
+      const type = input.attr("type") === "password" ? "text" : "password";
+      input.attr("type", type);
+
+      // Toggle icon class (eye/eye-slash)
+      $(this).toggleClass("fa-eye fa-eye-slash");
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+{% block title %}My Complaint Status | Neighborly{% endblock %}
+
+{% block content %}
+<section class="complaint-status-section" data-aos="fade-up">
+  <div class="status-container">
+    <h1>My Complaints</h1>
+    {% if complaints %}
+      <table class="complaint-table" data-aos="fade-up" data-aos-delay="100">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Submitted On</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for complaint in complaints %}
+          <tr data-aos="fade-right" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+            <td>{{ complaint.title }}</td>
+            <td>{{ complaint.category }}</td>
+            <td>
+              {% if complaint.status == 'pending' %}
+                <span class="status-pending" data-aos="zoom-in" data-aos-delay="200">Pending</span>
+              {% elif complaint.status == 'resolved' %}
+                <span class="status-resolved" data-aos="zoom-in" data-aos-delay="200">Resolved</span>
+              {% else %}
+                <span>{{ complaint.status }}</span>
+              {% endif %}
+            </td>
+            <td>{% localtime on %}
+                {{ complaint.created_at|date:"M d, Y,  H:i" }}
+              {% endlocaltime %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="status-p" data-aos="fade-in">You have not submitted any complaints yet.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

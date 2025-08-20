@@ -1,0 +1,221 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Neighborly - Community Management{% endblock %}</title>
+    <script src="{% static 'plugin/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'plugin/jquery.marquee.min.js' %}"></script>
+       
+   
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- In <head> add these CSS links -->
+    <link rel="stylesheet" href="{% static 'plugin/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'plugin/slick-theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'plugin/aos.css' %}">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- <link rel="stylesheet" href="{% static 'plugin/fontawesome/css/all.min.css' %}"> -->
+    <script src="{% static 'plugin/aos.js' %}"></script>
+    <script  src="{% static 'plugin/slick.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <link rel="icon" href="{% static 'images/logo.svg' %}" type="image/png">
+
+</head>
+<body>
+<!-- <div class="page-wrapper"> -->
+    <!-- HEADER START -->
+    <header class="header" >
+        <div class="w-layout-blockcontainer container-default w-container">
+            <div data-animation="over-left" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease"
+                 role="banner" class="navbar-container w-nav">
+                <div class="navbar-wrapper">
+                    <!-- Brand Logo -->
+                    <a href="{% url 'home' %}" class="navbar-brand w-nav-brand">
+                        <img loading="lazy"src="{% static 'images/logo.svg' %}"alt="Brand Logo"class="brand-logo"/>
+                        <span>Neighborly</span>
+                    </a>
+
+                   <!-- Navigation Menu -->
+                  <nav role="navigation" class="nav-menu-wrapper w-nav-menu">
+                      <ul role="list" class="nav-menu w-list-unstyled">
+                          <li class="nav-menu-list">
+                              <div class="nav-menu-link-wrapper">
+                                  <a href="{% url 'home' %}" class="nav-menu-link {% if request.resolver_match.url_name == 'home' %}w--current{% endif %}">Home</a>
+                              </div>
+                          </li>
+                          <li class="nav-menu-list">
+                              <div class="nav-menu-link-wrapper">
+                                  <a href="{% url 'about' %}" class="nav-menu-link {% if request.resolver_match.url_name == 'about' %}w--current{% endif %}">About Us</a>
+                              </div>
+                          </li>
+
+                          {% if user.is_authenticated %}
+                              {% if user.is_staff or user.is_superuser %}
+                                  <!-- Admin Only -->
+                                  <li class="nav-menu-list">
+                                      <div class="nav-menu-link-wrapper">
+                                          <a href="{% url 'admin_users_list' %}" class="nav-menu-link {% if request.resolver_match.url_name == 'admin_users_list' %}w--current{% endif %}">Admin Dashboard</a>
+                                      </div>
+                                  </li>
+                              {% else %}
+                                  <!-- Resident Only -->
+                                  <li class="nav-menu-list">
+                                      <div class="nav-menu-link-wrapper">
+                                          <a href="{% url 'complaints' %}" class="nav-menu-link {% if request.resolver_match.url_name == 'complaints' %}w--current{% endif %}">Complaints</a>
+                                      </div>
+                                  </li>
+                                  <li class="nav-menu-list">
+                                      <div class="nav-menu-link-wrapper">
+                                          <a href="{% url 'contact' %}" class="nav-menu-link {% if request.resolver_match.url_name == 'contact' %}w--current{% endif %}">Contact</a>
+                                      </div>
+                                  </li>
+                                
+                                  <li class="nav-menu-list">
+                                      <div class="nav-menu-link-wrapper">
+                                          <a href="{% url 'resident_dashboard' %}" class="nav-menu-link {% if request.resolver_match.url_name == 'resident_dashboard' %}w--current{% endif %}">My Dashboard</a>
+                                      </div>
+                                  </li>
+                              {% endif %}
+                          {% else %}
+                              <!-- Guest (Not logged in) -->
+                              <li class="nav-menu-list">
+                                  <div class="nav-menu-link-wrapper">
+                                      <a href="{% url 'complaints' %}" class="nav-menu-link {% if request.resolver_match.url_name == 'complaints' %}w--current{% endif %}">Complaints</a>
+                                  </div>
+                              </li>
+                              <li class="nav-menu-list">
+                                  <div class="nav-menu-link-wrapper">
+                                      <a href="{% url 'contact' %}" class="nav-menu-link {% if request.resolver_match.url_name == 'contact' %}w--current{% endif %}">Contact</a>
+                                  </div>
+                              </li>
+                              <li class="nav-menu-list">
+                                      <div class="nav-menu-link-wrapper">
+                                          <a href="{% url 'complaint_status' %}" class="nav-menu-link {% if request.resolver_match.url_name == 'complaint_status' %}w--current{% endif %}">Complaint Status</a>
+                                      </div>
+                                  </li>
+                          {% endif %}
+                      </ul>
+
+    
+                  </nav>
+                  <div class="nav-button-block">
+                          {% if user.is_authenticated %}
+                              <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                                  {% csrf_token %}
+                                  <button type="submit" class="nav-menu-button w-button" style="cursor:pointer;">Logout</button>
+                              </form>
+                          {% else %}
+                              <a href="{% url 'login' %}" class="nav-menu-button w-button">Login</a>
+                          {% endif %}
+                      </div>
+                    <!-- Mobile Menu Button -->
+                    <div class="menu-button w-nav-button">
+                        <div class="w-icon-nav-menu"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+<!-- AOS Animation -->
+
+
+
+
+    {% block content %}{% endblock %}
+  <section class="trusted-partners-section1" data-aos="fade-up">
+  <div class="container">
+    <!-- <h3 class="trusted-title">Empowering Your Neighborhood</h3> -->
+
+    <div class="partners-marquee">
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Community Housing</span>
+      </div>
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Secure Neighborhood</span>
+      </div>
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Resident Support</span>
+      </div>
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Real-time Updates</span>
+      </div>
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Quick Maintenance</span>
+      </div>
+    </div>
+  </div>
+</section>
+<footer class="footer" data-aos="fade-up"  data-aos-offset="200">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/" class="footer-image"><img src="/static/images/logo.svg" alt="Neighborly Logo" class="footer-logo"><span>Neighborly</span></a>
+        <p class="footer-about">A platform where neighbors connect, collaborate, and solve community concerns together.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/" target="_blank">
+            <div>IG</div>
+          </a>
+          <a href="https://twitter.com/" target="_blank">
+            <div>TW</div>
+          </a>
+          <a href="https://www.facebook.com/" target="_blank">
+            <div>FB</div>
+          </a>
+          <a href="https://web.whatsapp.com/" target="_blank">
+            <div>WS</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h4 class="footer-heading">Pages</h4>
+        <ul class="footer-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="{% url 'complaints' %}">Complaints</a></li>
+          <li><a href="{% url 'contact' %}#faq">FAQ</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4 class="footer-heading">Support</h4>
+        <ul class="footer-links">
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="{% url '404' %}">404 Not Found</a></li>
+          <li><a href="{% url 'guideline' %}">Community Guidelines</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-img">
+      <img src="{% static 'images/footer.png' %}" alt="logo" data-aos="fade-up"  data-aos-offset="200">
+      <span data-aos="fade-up"  data-aos-offset="300">Neighborly</span>
+    </div>
+    <div class="footer-bottom">
+      <p>Copyright © Neighborly | Designed by Huda and Mehwish </p>
+    </div>
+  </div>
+</footer>
+<script>
+  $(function() {
+    $('.partners-marquee').marquee({
+      duration: 30000,
+      gap: 30,
+      delayBeforeStart: 0,
+      direction: 'left',
+      duplicated: true ,
+      startVisible: true 
+    });
+  });
+</script>

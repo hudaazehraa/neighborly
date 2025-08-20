@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Complaint Form | Neighborly - Community Management{% endblock %}
+
+{% block content %}
+<section class="complaint-section" data-aos="fade-up" data-aos-duration="800">
+    <div class="complaint-container">
+        <h1 class="complaint-title">Submit a Complaint</h1>
+        <p class="complaint-subtitle">Fill in the details below so our admin team can assist you.</p>
+
+        <form method="post" enctype="multipart/form-data" class="complaint-form" id="complaintForm" novalidate>
+        {% csrf_token %}
+          <div class="form-group">
+              <label for="id_title">Title</label>
+              {{ form.title }}
+              <div class="error-container">
+                {% for error in form.title.errors %}
+                  <div class="error-message" data-aos="fade-in">{{ error }}</div>
+                {% endfor %}
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="id_description">Description</label>
+              {{ form.description }}
+              <div class="error-container">
+                {% for error in form.description.errors %}
+                  <div class="error-message">{{ error }}</div>
+                {% endfor %}
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="id_category">Category</label>
+              {{ form.category }}
+              <div class="error-container">
+                {% for error in form.category.errors %}
+                  <div class="error-message">{{ error }}</div>
+                {% endfor %}
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="id_image">Upload Image (Optional)</label>
+              {{ form.image }}
+              <div class="error-container">
+                {% for error in form.image.errors %}
+                  <div class="error-message">{{ error }} </div>
+                {% endfor %}
+              </div>
+          </div>
+          <button type="submit" class="btn-primary">Submit Complaint</button>
+        </form>
+
+    </div>
+</section>
+
+<style>
+  .error-message {
+    color: red;
+    font-weight: 600;
+    font-size: 16px;
+    margin: 5px 0 10px 0;
+    display: block;
+  }
+</style>
+
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<script>
+$(document).ready(function(){
+  $("#complaintForm").on("submit", function(e){
+    e.preventDefault();
+
+    $(".error-container").html('');
+
+    let isValid = true;
+    let title = $("#id_title").val().trim();
+    let desc = $("#id_description").val().trim();
+    let category = $("#id_category").val();
+    let image = $("#id_image").val();
+
+    if(title === ""){
+      $("#id_title").closest(".form-group").find(".error-container").html('<div class="error-message">Please enter a title</div>').fadeIn();
+      isValid = false;
+    }
+    if(desc === ""){
+      $("#id_description").closest(".form-group").find(".error-container").html('<div class="error-message">Please enter a description</div>').fadeIn();
+      isValid = false;
+    }
+    if(!category || category === ""){
+      $("#id_category").closest(".form-group").find(".error-container").html('<div class="error-message">Please select a category</div>').fadeIn();
+      isValid = false;
+    }
+    if(image !== ""){
+      let allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+      if(!allowedExtensions.exec(image)){
+        $("#id_image").closest(".form-group").find(".error-container").html('<div class="error-message">Only JPG, PNG or GIF files are allowed</div>').fadeIn();
+        isValid = false;
+      }
+    }
+    if(!isValid){
+      return;
+    }
+
+    let $btn = $(this).find("button[type='submit']");
+    $btn.html("Please wait...").prop("disabled", true);
+
+    let formData = new FormData(this);
+
+    $.ajax({
+      url: "{% url 'complaints' %}",
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response){
+        $(".complaint-form").fadeOut(300, function(){
+          let successMsg = $("<div class='success-message' style='padding:20px; background:#d4edda; color:#155724; border-radius:8px; text-align:center;'>Complaint submitted successfully ✅</div>");
+          $(this).after(successMsg);
+
+          $('html, body').animate({
+            scrollTop: successMsg.offset().top - 400
+          }, 600);
+
+          // After 3 seconds, redirect to feedback page
+          setTimeout(function(){
+            window.location.href = "{% url 'feedback' %}";  // Replace 'feedback' with your feedback URL name
+          }, 3000);
+        });
+      },
+      error: function(xhr){
+        let errors = xhr.responseJSON?.errors || {};
+        $(".error-container").html('');
+
+        for (const [field, messages] of Object.entries(errors)) {
+          let container = $("#id_" + field).closest(".form-group").find(".error-container");
+          messages.forEach(msg => {
+            container.append('<div class="error-message">' + msg + '</div>');
+          });
+        }
+
+        $btn.html("Submit Complaint").prop("disabled", false);
+      }
+    });
+  });
+});
+
+</script>
+
+{% endblock %}

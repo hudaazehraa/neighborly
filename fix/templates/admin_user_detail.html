@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Details | Neighborly{% endblock %}
+
+{% block content %}
+<section class="admin-dashboard-section section-gap1" data-aos="fade-up">
+    <div class="w-layout-blockcontainer container-default w-container">
+
+        <h1 class="admin-section-title">User: {{ user_obj.user.username }}</h1>
+        <p class="admin-section-subtitle">Apartment: {{ user_obj.apartment_number }}</p>
+
+        <h2 class="section-subtitle" style="margin-top:20px; font-size: 25px;">Complaints</h2>
+        <div class="table-wrapper">
+            <table class="custom-table" data-aos="fade-up" data-aos-delay="100">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for complaint in complaints %}
+                    <tr data-aos="fade-right" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                        <td>{{ complaint.title }}</td>
+                        <td>{{ complaint.description }}</td>
+                        <td>
+                            <span class="status-badge {% if complaint.status == 'pending' %}status-pending{% else %}status-resolved{% endif %}" data-aos="zoom-in" data-aos-delay="200">
+                                {{ complaint.status }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if complaint.status == "pending" %}
+                                <form method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="complaint_id" value="{{ complaint.id }}">
+                                    <button type="submit" class="btn-secondary small-btn">Mark Resolved</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center" style="text-align: center;">No complaints found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

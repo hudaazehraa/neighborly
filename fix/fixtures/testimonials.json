@@ -1,0 +1,46 @@
+[
+    {
+        "model": "fix.testimonial",
+        "pk": 1,
+        "fields": {
+            "resident": 1,
+            "rating": 5,
+            "comments": "Neighborly has made our community communication so smooth! Highly recommend.",
+            "created_at": "2025-08-01T10:30:00Z",
+            "approved": true
+        }
+    },
+    {
+        "model": "fix.testimonial",
+        "pk": 2,
+        "fields": {
+            "resident": 2,
+            "rating": 4,
+            "comments": "The complaint system is fast and efficient. Some small improvements could make it even better.",
+            "created_at": "2025-08-02T14:15:00Z",
+            "approved": true
+        }
+    },
+    {
+        "model": "fix.testimonial",
+        "pk": 3,
+        "fields": {
+            "resident": 3,
+            "rating": 5,
+            "comments": "Absolutely love the platform! Easy to use and very helpful.",
+            "created_at": "2025-08-03T08:45:00Z",
+            "approved": false
+        }
+    },
+    {
+        "model": "fix.testimonial",
+        "pk": 4,
+        "fields": {
+            "resident": null,
+            "rating": 3,
+            "comments": "It's good, but sometimes the site loads slowly.",
+            "created_at": "2025-08-04T12:20:00Z",
+            "approved": true
+        }
+    }
+]

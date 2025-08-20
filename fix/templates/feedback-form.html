@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block title %}Feedback | Neighborly - Community Management{% endblock %}
+
+{% block content %}
+<section class="feedback-section">
+  <div class="feedback-container" data-aos="fade-up" data-aos-duration="800">
+    <h1>We’d love your feedback!</h1>
+    <p class="complaint-subtitle">We value your opinion — let us know what you think.</p>
+
+    <!-- Error message container -->
+    <!-- <div class="error-message" style="display:none; color:red; margin-bottom:10px;"></div> -->
+
+    <form id="feedbackForm" method="post" action="{% url 'feedback' %}" class="feedback-form" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label>Rating</label>
+        <div class="star-rating">
+          <span class="star" data-value="5">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="1">★</span>
+        </div>
+        <input type="hidden" name="rating" id="rating" required>
+        <div class="error-message" style="display:none; color:red; margin-bottom:10px;"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="id_comments">Comments</label>
+        <textarea name="comments" id="id_comments" class="form-control" rows="4" placeholder="Comments" required></textarea>
+        <div class="error-message" style="display:none; color:red; margin-bottom:10px;"></div>
+      </div>
+
+      <button type="submit" class="btn-primary2">Send Feedback</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  $(document).ready(function () {
+    $(".star").on("click", function () {
+        let rating = $(this).data("value");
+        $("#rating").val(rating);
+
+        // Highlight stars from left up to clicked one
+        $(".star").removeClass("selected").each(function () {
+            if ($(this).data("value") <= rating) {
+                $(this).addClass("selected");
+            }
+        });
+
+        // Hide rating error when a star is clicked
+        $("#rating").closest(".form-group").find(".error-message").hide();
+    });
+
+    $("#id_comments").on("input", function () {
+        // Hide comment error when typing
+        $(this).closest(".form-group").find(".error-message").hide();
+    });
+
+    $("#feedbackForm").on("submit", function (e) {
+        e.preventDefault();
+
+        let rating = $("#rating").val();
+        let comments = $("#id_comments").val().trim();
+
+        // Reset all errors
+        $(".error-message").hide().text("");
+
+        let hasError = false;
+
+        if (!rating) {
+            $("#rating").closest(".form-group").find(".error-message")
+                .text("Please select a rating.")
+                .fadeIn();
+            hasError = true;
+        }
+
+        if (!comments) {
+            $("#id_comments").closest(".form-group").find(".error-message")
+                .text("Please enter your comments.")
+                .fadeIn();
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        let $form = $(this);
+        let $btn = $form.find("button[type='submit']");
+        $btn.text("Please wait...").prop("disabled", true);
+
+        $.ajax({
+            url: $form.attr("action"),
+            method: "POST",
+            data: $form.serialize(),
+            success: function (response) {
+                $(".feedback-form").fadeOut(300, function () {
+                    let message = $("<div class='success-message'>Thank you for your feedback! 🙌</div>");
+                    $(this).after(message);
+
+                    $("html, body").animate({
+                        scrollTop: message.offset().top - 450
+                    }, 600);
+                });
+            },
+            error: function () {
+                // Show general error at top (or inside rating field if you want)
+                $(".feedback-form").prepend(
+                    "<div class='error-message' style='color:red;margin-bottom:10px;'>Something went wrong submitting your feedback.</div>"
+                );
+                $btn.text("Send Feedback").prop("disabled", false);
+            },
+        });
+    });
+});
+
+</script>
+{% endblock %}

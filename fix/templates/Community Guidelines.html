@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Community Guidelines | Neighborly - Community Management{% endblock %}
+
+{% block content %}
+<!-- Community Guidelines Section -->
+<section class="guidelines-section">
+  <div class="container-default w-container">
+    <div class="guidelines-header" data-aos="fade-up">
+      <h1 class="guide-title">Community Guidelines</h1>
+      <p class="guide-subtitle">Our goal is to keep Neighborly a safe, respectful, and welcoming place for everyone.</p>
+    </div>
+
+    <div class="guidelines-wrapper">
+      <!-- What You Should Do -->
+      <div class="guidelines-card" data-aos="fade-up" data-aos-delay="100">
+        <h2 class="guidelines-title">
+          <i class="fas fa-check-circle"></i> What You Should Do
+        </h2>
+        <ul class="guidelines-list">
+          <li><strong>Be Respectful:</strong> Treat others the way you want to be treated.</li>
+          <li><strong>Stay Relevant:</strong> Keep discussions focused on community topics.</li>
+          <li><strong>Use Clear Language:</strong> Write in a way that’s easy for others to understand.</li>
+          <li><strong>Report Issues:</strong> If you see something harmful, report it instead of responding negatively.</li>
+          <li><strong>Protect Privacy:</strong> Share your own information carefully and respect the privacy of others.</li>
+        </ul>
+      </div>
+
+      <!-- What You Shouldn’t Do -->
+      <div class="guidelines-card" data-aos="fade-up" data-aos-delay="200">
+        <h2 class="guidelines-title">
+          <i class="fas fa-ban"></i> What You Shouldn’t Do
+        </h2>
+        <ul class="guidelines-list">
+          <li><strong>No Harassment or Bullying:</strong> Do not insult, threaten, or target anyone.</li>
+          <li><strong>No Hate Speech or Discrimination:</strong> Attacks based on race, religion, gender, or identity will not be tolerated.</li>
+          <li><strong>No Spam or Self-Promotion:</strong> Don’t flood the community with ads or irrelevant links.</li>
+          <li><strong>No Illegal Content:</strong> Don’t share anything that violates the law.</li>
+          <li><strong>No Misinformation:</strong> Avoid spreading rumors, false or misleading content.</li>
+        </ul>
+      </div>
+
+      <!-- Consequences -->
+      <div class="guidelines-card" data-aos="fade-up" data-aos-delay="300">
+        <h2 class="guidelines-title">
+          <i class="fas fa-balance-scale"></i> Consequences
+        </h2>
+        <p>Breaking these rules may lead to warnings, content removal, or suspension of your account.</p>
+      </div>
+
+      <!-- Closing Note -->
+      <div class="guidelines-card" data-aos="fade-up" data-aos-delay="400">
+        <h2 class="guidelines-title">
+          <i class="fas fa-user"></i> Our Goal
+        </h2>
+        <p>We’re building a supportive, helpful, and friendly community. Thank you for keeping Neighborly a safe place for everyone!</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

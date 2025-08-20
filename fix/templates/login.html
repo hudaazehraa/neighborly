@@ -1,0 +1,188 @@
+{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Log In | Neighborly - Community Management</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="{% static 'images/logo.svg' %}" type="image/png" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"rel="stylesheet"/>
+  <script src="{% static 'plugin/jquery-3.6.0.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+  <style>
+    .error-message {
+      color: red;
+      font-size: 16px;
+      font-weight: 600;
+      display: block;
+    }
+    .server-error {
+      background-color: #ffe6e6;
+      border: 1px solid red;
+      color: red;
+      font-weight: 700;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+    }
+    /* Role choice */
+    .login-choice {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .choice-btn {
+      margin: 0 10px;
+      padding: 18px 26px;
+      font-size: 18px;
+      background-color: #1a2767;
+      color: #fff;
+      border: none;
+      line-height: 1;
+      font-weight: 500;
+      border-radius: 100px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border .4s, background-color .4s, color .4s;
+
+    }
+    .choice-btn:hover {
+      background-color: transparent;
+      border: 1px solid #030303;
+      color: #030303;
+    }
+    #loginForm {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <section class="auth-section"data-aos="fade-up" data-aos-duration="800">
+    <div class="auth-container" data-aos="fade-up" data-aos-duration="800">
+
+      <!-- Logo + Heading -->
+      <div class="auth-head">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'images/logo.svg' %}" alt="Logo" class="auth-logo" />
+        </a>
+        <h1 class="auth-title">Select Login Type</h1>
+        <p class="auth-subtitle">Choose whether you want to log in as a User or Admin.</p>
+      </div>
+
+      <!-- Role Selection -->
+      <div class="login-choice">
+        <button type="button" class="choice-btn" data-role="user" >User Login</button>
+        <button type="button" class="choice-btn" data-role="admin">Admin Login</button>
+      </div>
+
+      <!-- Login Form -->
+      <form method="POST" action="{% url 'login' %}" class="auth-form" id="loginForm" novalidate>
+        {% csrf_token %}
+
+        {% if error %}
+          <div class="server-error">{{ error }}</div>
+        {% endif %}
+
+        <input type="hidden" name="role" id="role" value="" />
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" name="email" id="email" placeholder="Enter email" required />
+        </div>
+
+        <div class="form-group password-group">
+          <label for="password">Password</label>
+          <div class="password-wrapper">
+            <input type="password" name="password" id="password" placeholder="Enter password" required />
+            <i class="fa-solid fa-eye toggle-password" data-target="password"></i>
+          </div>
+          <div class="form-extra">
+            <label class="check-label">
+              <input type="checkbox" name="remember" class="check-box" /> Remember me
+            </label>
+            <a href="{% url 'forgot_password' %}" class="link-reset">Forgot?</a>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-auth">Sign In Now</button>
+
+        {% if not user.is_staff %}
+        <a href="{% provider_login_url 'google' %}" class="btn-google">Continue with Google</a>
+        {% endif %}
+
+        <div class="form-footer">
+          Don’t have an account? <a href="{% url 'signup' %}">Sign Up</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- AOS Animation -->
+  <link rel="stylesheet" href="{% static 'plugin/aos.css' %}">
+  <script src="{% static 'plugin/aos.js' %}"></script>
+  <script src="{% static 'js/script.js' %}"></script>
+
+  <script>
+    $(document).ready(function () {
+      // Role selection
+    $(".choice-btn").click(function () {
+    const role = $(this).data("role");
+    $("#role").val(role);
+    $("#loginForm").fadeIn();
+    $(".login-choice").hide();
+    $(".auth-title").text(role === "admin" ? "Admin Login" : "User Login");
+    $(".auth-subtitle").text(role === "admin" 
+      ? "Log in to manage residents and complaints." 
+      : "Log in to submit complaints and manage your account."
+    );
+
+    // Hide Google button if admin is selected
+    if (role === "admin") {
+        $(".btn-google").hide();
+    } else {
+        $(".btn-google").show();
+    }
+});
+
+      // Form validation
+      $("#loginForm").on("submit", function (e) {
+        $(".error-message").remove();
+        let isValid = true;
+        let email = $("#email").val().trim();
+        let password = $("#password").val().trim();
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (email === "") {
+          $("#email").after("<div class='error-message'>Please enter your email address</div>");
+          isValid = false;
+        } else if (!emailPattern.test(email)) {
+          $("#email").after("<div class='error-message'>Please enter a valid email address</div>");
+          isValid = false;
+        }
+        if (password === "") {
+          $("#password").after("<div class='error-message'>Please enter your password</div>");
+          isValid = false;
+        }
+        if (!isValid) {
+          e.preventDefault();
+        } else {
+          $(this).find("button[type='submit']").html("Please wait...").prop("disabled", true);
+        }
+      });
+
+      // Toggle password visibility
+      $(".toggle-password").click(function () {
+        const targetId = $(this).data("target");
+        const input = $("#" + targetId);
+        const type = input.attr("type") === "password" ? "text" : "password";
+        input.attr("type", type);
+        $(this).toggleClass("fa-eye fa-eye-slash");
+      });
+    });
+  </script>
+</body>
+</html>

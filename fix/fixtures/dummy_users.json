@@ -1,0 +1,18 @@
+[
+    {
+        "username": "resident1",
+        "password": "pass123",
+        "first_name": "Ali",
+        "last_name": "Khan",
+        "email": "ali@example.com",
+        "apartment_number": "A-101"
+    },
+    {
+        "username": "resident2",
+        "password": "pass456",
+        "first_name": "Sara",
+        "last_name": "Iqbal",
+        "email": "sara@example.com",
+        "apartment_number": "B-202"
+    }
+]

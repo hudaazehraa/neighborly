@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- HERO SECTION START -->
+<section class="hero-section" >
+    <div class="hero-overlay">
+        <div class="hero-text" data-aos="fade-up">
+            <h1 class="hero-title">Manage Together, Live Better</h1>
+            <p class="hero-subtitle">
+                Submit and track complaints, connect with your neighborhood administration, and keep your community running smoothly.
+            </p>
+
+            <!-- Search / Filter Card -->
+            <div class="hero-search-card">
+              <form class="hero-search-form" method="get" action="{% url 'complaint_status' %}">
+                {% csrf_token %}
+                  <div class="search-field">
+                      <select name="category">
+                          <option value="">Category</option>
+                          {% for cat in categories %}
+                              <option value="{{ cat }}" {% if filters.category == cat %}selected{% endif %}>
+                                  {{ cat|capfirst }}
+                              </option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div class="search-field">
+                      <select name="status">
+                          <option value="">Status</option>
+                          {% for stat in statuses %}
+                              <option value="{{ stat }}" {% if filters.status == stat %}selected{% endif %}>
+                                  {{ stat|capfirst }}
+                              </option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div class="search-field">
+                      <input type="text" name="search" placeholder="Search by title or ID" value="{{ filters.search }}">
+                  </div>
+                  <button type="submit" class="search-btn">Search</button>
+              </form>
+
+              <!-- Display filtered complaints -->
+              {% if complaints %}
+                  <ul class="complaint-list">
+                      {% for complaint in complaints %}
+                          <li>{{ complaint.title }} - {{ complaint.get_category_display }} - {{ complaint.get_status_display }}</li>
+                      {% endfor %}
+                  </ul>
+              {% else %}
+                  <!-- <p>No complaints found matching your filters.</p> -->
+              {% endif %}
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- HERO SECTION END -->
+<section class="trusted-partners-section" data-aos="fade-up">
+  <div class="container">
+    <!-- <h2 class="trusted-title">Empowering Your Neighborhood</h2> -->
+
+    <div class="partners-marquee">
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Community Housing</span>
+      </div>
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Secure Neighborhood</span>
+      </div>
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Resident Support</span>
+      </div>
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Real-time Updates</span>
+      </div>
+      <div class="marquee-item">
+        <img src="{% static 'images/footer.png' %}" alt="Secure Neighborhood">
+        <span>Quick Maintenance</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="about-community-section">
+  <div class="about-container" data-aos="fade-up">
+       <div class="section-header-block center-align">
+      <div class="section-title-block ">
+        <h2 class="section-title1 text-center">Building Better Neighborhoods Together</h2>
+        <p class="section-subtitle1 text-center">
+          Our platform empowers residents to easily submit complaints, track progress in real-time,
+          and stay informed about their community — fostering safer, happier neighborhoods.
+        </p>
+      </div>
+    </div>
+    <div class="about-wrapper">
+      <!-- Image Side -->
+      <div class="about-thumbnail" data-aos="fade-right" data-aos-delay="200">
+        <img src="{% static 'images/community.jpg' %}" alt="Community Support">
+      </div>
+
+      <!-- Content Side -->
+      <div class="about-content" data-aos="fade-left" data-aos-delay="300">
+        <div class="about-stats">
+          <div class="stat-item">
+            <h3 class="stat-number" data-count="7" data-count="5000" data-aos="fade-up">0</h3>
+            <p>Years Supporting Communities</p>
+          </div>
+          <hr class="divider"> 
+          <div class="stat-item">
+            <h3 class="stat-number" data-count="5000" data-count="5000" data-aos="fade-up">0</h3>
+            <p>Complaints Resolved</p>
+          </div>
+          <hr class="divider"> 
+          <div class="stat-item">
+            <h3 class="stat-number" data-count="20" data-count="5000" data-aos="fade-up">0</h3>
+            <p>Active Neighborhoods</p>
+          </div>
+          <hr class="divider"> 
+        </div>
+         <!-- <hr class="divider">  -->
+        <!-- Features -->
+        <ul class="about-features">
+          <li>Transparent Complaint Tracking</li>
+          <!-- <li>24/7 Admin Communication</li> -->
+          <!-- <li>Community Collaboration</li> -->
+          <li>Quick Resolution Metrics</li>
+        </ul>
+
+        <!-- CTA Buttons -->
+        <div class="about-buttons">
+          <a href="{% url 'signup' %}" class="btn-primary">Sign Up Now</a>
+          <a href="{% url 'about' %}" class="btn-secondary">Explore About Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="featured-section" data-aos="fade-up">
+  <div class="blue">
+  <div class="container-default1">
+    
+    <!-- Section Title -->
+    <div class="section-header-block center-align">
+      <div class="section-title-block max-width-810px">
+        <h2 class="section-title1 text-center">
+          Features That Simplify Community Living
+        </h2>
+        <p class="section-subtitle1 text-center">
+          Manage complaints, stay updated, and foster safer neighborhoods — all in one place.
+        </p>
+      </div>
+    </div>
+
+    <!-- Content: Cards + Image -->
+    <div class="featured-content">
+      
+      <!-- Left Column: Features Grid -->
+      <div class="features-grid">
+        <!-- Card 1 -->
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="icon-circle">
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+          <h3 class="card-title">Complaint Tracking</h3>
+          <p class="card-desc">
+            Submit issues and track resolution status in real-time.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="icon-circle">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+          <h3 class="card-title">Community Updates</h3>
+          <p class="card-desc">
+            Get important announcements and stay informed about local events.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="icon-circle">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <h3 class="card-title">Secure Access</h3>
+          <p class="card-desc">
+            Role-based login ensures privacy for residents and admins.
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="icon-circle">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 class="card-title">Reports & Insights</h3>
+          <p class="card-desc">
+            Gain clear insights into complaint patterns and resolutions.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Column: Image -->
+      <div class="features-image" data-aos="fade-left" data-aos-delay="400">
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+    <section class="facilities-section" >
+  <div class="container-default">
+    <!-- CTA Section -->
+    <div class="facilities-cta">
+      <h3 class="cta-title">Ready to Get Started?</h3>
+      <p class="cta-text">
+        Sign up now to submit your first complaint and join a transparent community system.
+      </p>
+
+      <!-- CTA Form -->
+      <form class="cta-form" method="get" action="{% url 'signup' %}">
+        {% csrf_token %}
+        <input type="email" placeholder="Enter your email" required>
+        <button type="submit" class="btn-primary">Get Started</button>
+      </form>
+
+      <p class="cta-signin">
+        Already a member? <a href="{% url 'login' %}">Sign in</a>
+      </p>
+    </div>
+  </div>
+</section>
+<!-- testomnial -->
+<section class="testimonial-section" data-aos="fade-up">
+  <div class="section-gap">
+    <div class="w-layout-blockcontainer container-default w-container">
+      <div class="testimonial-section-wrapper">
+        <div class="testimonial-wrapper">
+          <div class="testimonial-slider">
+            <div class="testimonial-title-wrapper margin-bottom-60px">
+              <h2 class="section-title4">Trusted Real Estate Clients</h2>
+              <div class="testimonial-slide-arrow left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                <path d="M8.9999 17.1094L4 12.1094L9 7.10938" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20 12.1094H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="testimonial-slide-arrow right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                <path d="M15.0001 17.1094L20 12.1094L15 7.10938" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 12.1094H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            </div>
+            <div class="testimonial-slider-mask">
+              {% for t in testimonials %}
+              <div class="testimonial-slide">
+                <div class="testimonial-card-block">
+                  <div class="testimonial-image-wrap">
+                    {% if t.resident and t.resident.user.profile.image_url %}
+                      <img loading="lazy" src="{{ t.resident.user.profile.image_url }}" alt="{{ t.resident.user.username }}" class="testimonial-image"/>
+                    {% else %}
+                      <i class="fa fa-user testimonial-image-icon"></i>
+                    {% endif %}
+                  </div>
+                  <div class="testimonial-stars">
+                  {% for i in "12345" %}
+                    {% if forloop.counter <= t.rating %}
+                      <i class="fas fa-star star-filled"></i>
+                    {% else %}
+                      <i class="far fa-star star-empty"></i>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+
+                  <p class="testimonial-text">“{{ t.comments }}”</p>
+                  <div class="testimonial-info">
+                    <div class="testimonial-author-info">
+                      <div class="testimonial-author">
+                        {% if t.resident %}
+                          {{ t.resident.user.get_full_name|default:t.resident.user.username }}
+                        {% else %}
+                          Anonymous
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+            <p>No testimonials available yet.</p>
+            {% endfor %}
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> 
+
+<section class="inquiry-banner" data-aos="fade-up">
+  <div class="container inquiry-banner-content">
+    <div class="inquiry-banner-text">
+      <h2>Any Inquiry? Feel free to contact us.</h2>
+      <p>We’re here to help — get in touch with our team anytime.</p>
+    </div>
+    <div class="inquiry-banner-button">
+      <a href="{% url 'contact' %}" class="btn-primary">Send Message</a>
+    </div>
+  </div>
+  <img src="/static/images/contact.svg" alt="contact" class="inquiry-img">
+</section>
+
+<script>
+  $(window).on("scroll", function() {
+    $('.stat-number').each(function () {
+      var $this = $(this);
+      if (!$this.hasClass('counted') && $(window).scrollTop() + $(window).height() > $this.offset().top) {
+        $this.addClass('counted');
+        $({ countNum: 0 }).animate({ countNum: $this.data('count') }, {
+          duration: 3000,
+          easing: 'swing',
+          step: function () {
+            $this.text(Math.floor(this.countNum));
+          },
+          complete: function () {
+            $this.text(this.countNum + "+");
+          }
+        });
+      }
+    });
+  });
+</script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
+<script>
+$(document).ready(function(){
+  $('.testimonial-slider-mask').slick({
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    infinite: true,
+    autoplay: true,
+    autoplaySpeed: 2500,
+    arrows: true,
+    prevArrow: $('.testimonial-slide-arrow.left'),
+    nextArrow: $('.testimonial-slide-arrow.right'),
+    variableWidth: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+        }
+      }
+    ]
+  });
+});
+</script>
+
+
+
+{% endblock %}

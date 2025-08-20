@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not Found</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="{% static 'images/logo.svg' %}" type="image/png" />
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body class="utility-body">
+    <div class="utility-page-wrap">
+        <div class="utility-page-content">
+            <img src="{% static 'images/404.svg' %}" alt="404" class="_404-banner-image"/>
+            <h2 class="utility-page-title">Page Not Found</h2>
+            <div class="utility-page-summary">
+                Oops, looks like we cleaned a bit too much. Let’s retrace our steps and go back to the homepage.
+            </div>
+            <div class="utility-button-wrap">
+                <a href="{% url 'home' %}" class="primary-button">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin - Users List | Neighborly{% endblock %}
+
+{% block content %}
+<section class="admin-dashboard-section section-gap1" data-aos="fade-up">
+  <div class="w-layout-blockcontainer container-default w-container">
+
+    <h1 class="admin-section-title">All Residents</h1>
+
+    <!-- Search -->
+    <form method="get" class="search-form" style="margin-top: 10px;">
+      {% csrf_token %}
+      <input type="text" name="q" class="search-input" placeholder="Search by username or apartment" value="{{ query }}">
+      <button type="submit" class="admin-btn-primary">Search</button>
+    </form>
+
+    <!-- Charts Section -->
+    <div class="admin-charts-section" style="margin: 40px 0;">
+      <h2 class="section-subtitle" style="margin-top:20px; font-size: 25px;">Community Overview</h2>
+      <div class="admin-charts">
+        <div style="max-width: 500px; height: 300px; margin-right: auto; margin-left: auto;" data-aos="fade-right" data-aos-delay="200">
+          <canvas id="residentsChart"></canvas>
+        </div>
+        <div style="max-width: 500px; height: 300px; margin-right: auto; margin-left: auto;" data-aos="fade-left" data-aos-delay="300">
+          <canvas id="complaintsChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-wrapper">
+      <table class="custom-table" data-aos="fade-up" data-aos-delay="100">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Apartment Number</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr data-aos="fade-right" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+            <td>{{ user.user.username }}</td>
+            <td>{{ user.apartment_number }}</td>
+            <td>
+              <a href="{% url 'admin_user_detail' user.id %}" class="btn-secondary small-btn">View Details</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center" style="text-align: center;">No users found</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- Hidden JSON data -->
+{{ labels|json_script:"residentsLabels" }}
+{{ data|json_script:"residentsData" }}
+{{ pending_count|default:0|json_script:"pendingCount" }}
+{{ resolved_count|default:0|json_script:"resolvedCount" }}
+
+<script src="{% static 'plugin/chart.js' %}"></script>
+<script>
+  const residentsCtx = document.getElementById('residentsChart').getContext('2d');
+  const complaintsCtx = document.getElementById('complaintsChart').getContext('2d');
+
+  // Resident growth data
+  const residentLabels = JSON.parse(document.getElementById('residentsLabels').textContent);
+  const residentData = JSON.parse(document.getElementById('residentsData').textContent);
+
+  // Complaints data
+  const pendingCount = JSON.parse(document.getElementById('pendingCount').textContent);
+  const resolvedCount = JSON.parse(document.getElementById('resolvedCount').textContent);
+
+  // Residents Over Time (Bar Chart)
+  new Chart(residentsCtx, {
+    type: 'bar',
+    data: {
+      labels: residentLabels,
+      datasets: [{
+        label: 'Residents Joined',
+        data: residentData,
+        backgroundColor: '#1a2767',
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: 'Residents Growth Over Time', font: { size: 18 } }
+      },
+      scales: {
+        x: { ticks: { color: '#030303', font: { size: 12 } } },
+        y: { beginAtZero: true, ticks: { color: '#030303', stepSize: 1 } }
+      }
+    }
+  });
+
+  // Complaints Chart (Pie)
+  new Chart(complaintsCtx, {
+    type: 'pie',
+    data: {
+      labels: ['Pending', 'Resolved'],
+      datasets: [{
+        data: [pendingCount, resolvedCount],
+        backgroundColor: ['#ced0f8', '#1a2767'],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#030303', font: { size: 14 } }},
+        title: { display: true, text: 'Complaints Status', font: { size: 18 } }
+      }
+    }
+  });
+</script>
+
+
+
+{% endblock %}
