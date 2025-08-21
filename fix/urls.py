@@ -20,30 +20,13 @@ urlpatterns = [
     path('resident/dashboard/', views.resident_dashboard, name='resident_dashboard'),
     path('community/',views.community_guideline, name='guideline'),
     path('feedback/', views.feedback_page, name='feedback'),
-    path(
-        'forgot_password/',
-        auth_views.PasswordResetView.as_view(template_name='forgot.html'),
-        name='forgot_password'
-    ),
-#     path(
-#     'reset/<uidb64>/<token>/',
-#     auth_views.PasswordResetConfirmView.as_view(
-#         template_name='password_reset_confirm.html',
-#         form_class=CustomSetPasswordForm  # ✅ use your form here
-#     ),
-#     name='password_reset_confirm'
-# ),
+    path('forgot_password/',auth_views.PasswordResetView.as_view(template_name='forgot.html'),name='forgot_password'),
     path(
         'password_reset/done/',
         auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),
         name='password_reset_done'
     ),
-     path('reset/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    # path(
-    #     'reset/<uidb64>/<token>/',
-    #     auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'),
-    #     name='password_reset_confirm'
-    # ),
+    path('reset/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path(
         'reset_password_complete/',
         auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
