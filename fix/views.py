@@ -208,50 +208,6 @@ def about_view(request):
     return render(request, 'about.html', {
         'testimonials': testimonials,})
 
-
-# @login_required(login_url='/signup/')
-# def complaint_page(request):
-#     # Ensure resident profile exists
-#     resident, created = Resident.objects.get_or_create(
-#         user=request.user,
-#         defaults={'apartment_number': 'N/A'}
-#     )
-
-#     if request.method == "POST":
-#         form = ComplaintForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             complaint = form.save(commit=False)
-#             complaint.resident = resident
-#             complaint.status = 'pending'
-#             complaint.save()
-
-#             # ✅ Send email to admin
-#             subject = f"New Complaint from {request.user.username}"
-#             message = (
-#                 f"User: {request.user.username}\n"
-#                 f"Apartment: {resident.apartment_number}\n"
-#                 f"Title: {complaint.title}\n"
-#                 f"Description: {complaint.description}\n"
-#                 f"Status: {complaint.status}"
-#             )
-#             admin_email = settings.DEFAULT_FROM_EMAIL  # Or use settings.ADMIN_EMAIL
-#             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [admin_email])
-
-#             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#                 return JsonResponse({'success': True})
-#             return redirect('home')
-
-#         else:
-#             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#                 errors = {field: list(errors) for field, errors in form.errors.items()}
-#                 return JsonResponse({'success': False, 'errors': errors}, status=400)
-
-#     else:
-#         form = ComplaintForm()
-
-#     return render(request, 'complaint.html', {'form': form})
-
-
 @login_required(login_url='/signup/')
 def complaint_status_view(request):
     category = request.GET.get('category')
