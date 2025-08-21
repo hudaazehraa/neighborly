@@ -27,11 +27,7 @@ urlpatterns = [
         name='password_reset_done'
     ),
     path('reset/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path(
-        'reset_password_complete/',
-        auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
-        name='password_reset_complete'
-    ),
+    path('reset_password_complete/',auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),name='password_reset_complete'),
     path("test-email/", views.test_email, name="test_email"),
       # normal Django admin site
     path('admin/', admin.site.urls),
