@@ -24,11 +24,11 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             user.backend = 'allauth.account.auth_backends.AuthenticationBackend'
             login(request, user)
 
-            # 🚨 Stop allauth from continuing → redirect to dashboard/home
+            # Redirect to dashboard/home
             raise ImmediateHttpResponse(redirect("/"))
 
-        except Resident.DoesNotExist:
-            # 🚨 Instead of allauth’s form → redirect to your signup page
+        except Resident.DoesNotExist as exc:
+            # Redirect to your signup page
             signup_url = reverse("signup")
             signup_url += f"?email={user.email or ''}&first_name={user.first_name or ''}&last_name={user.last_name or ''}"
-            raise ImmediateHttpResponse(redirect(signup_url))
+            raise ImmediateHttpResponse(redirect(signup_url)) from exc
