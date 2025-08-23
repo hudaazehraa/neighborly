@@ -1,8 +1,8 @@
 from django.urls import path, include
-from . import views
-from django.contrib.auth import views as auth_views
-from fix.views import CustomPasswordResetConfirmView
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from . import views
+from fix.views import CustomPasswordResetConfirmView
 
 urlpatterns = [
     # ---------- Template Rendering Views ----------
@@ -18,24 +18,36 @@ urlpatterns = [
     path('admin-dashboard/users/', views.admin_users_list, name='admin_users_list'),
     path('admin-dashboard/users/<int:user_id>/', views.admin_user_detail, name='admin_user_detail'),
     path('resident/dashboard/', views.resident_dashboard, name='resident_dashboard'),
-    path('community/',views.community_guideline, name='guideline'),
+    path('community/', views.community_guideline, name='guideline'),
     path('feedback/', views.feedback_page, name='feedback'),
-    path('forgot_password/',auth_views.PasswordResetView.as_view(template_name='forgot.html'),name='forgot_password'),
-    path('password_reset/done/',auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),name='password_reset_done'),
+    
+    # ---------- Password Reset Views ----------
+    path('forgot_password/', auth_views.PasswordResetView.as_view(template_name='forgot.html'), name='forgot_password'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('reset_password_complete/',auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),name='password_reset_complete'),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'),
+
+    # ---------- Test Email ----------
     path("test-email/", views.test_email, name="test_email"),
-      # normal Django admin site
+
+    # ---------- Django Admin ----------
     path('admin/', admin.site.urls),
+
     # ---------- API Endpoints ----------
     path('api/signup/', views.signup_api, name='api_signup'),
     path('api/login/', views.login_api, name='api_login'),
     path('api/complaints/submit/', views.submit_complaint, name='submit_complaint'),
 
-    # ---------- Authentication / Social Login ----------
-    path('auth/', include('dj_rest_auth.urls')),  # login/logout/password reset
+
+
+# ---------- Authentication / Social Login ----------
+
+# 1️⃣ Override email verification sent page
+    # 2️⃣ Include registration URLs AFTER the override
     path('auth/registration/', include('dj_rest_auth.registration.urls')),  # sign up
-    path('auth/social/', include('allauth.socialaccount.urls')),  # for Google login
-    path('accounts/', include('allauth.urls')),  # needed for Google OAuth flow
-    
+
+    # 3️⃣ Other auth URLs
+    path('auth/', include('dj_rest_auth.urls')),  # login/logout/password reset
+    path('auth/social/', include('allauth.socialaccount.urls')),  # Google login
+    path('accounts/', include('allauth.urls')),  # required for Google OAuth flo
 ]

@@ -171,8 +171,6 @@ def sign_up_page(request):
 
     return render(request, 'sign-up.html', {"form": form})
 
-
-
 def contact_page(request):
     if request.method == "POST":
         form = ContactForm(request.POST)

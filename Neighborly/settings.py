@@ -65,7 +65,7 @@ ROOT_URLCONF = 'Neighborly.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR/'templates'],
+        'DIRS': [BASE_DIR/'templates', BASE_DIR/'fix'/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -162,8 +162,8 @@ REST_USE_JWT = True
 # Admin notification email
 ADMIN_NOTIFICATION_EMAIL = "stemedge.edu@gmail.com"
 # Allauth settings
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 # ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_USERNAME_REQUIRED = True
@@ -182,6 +182,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# ACCOUNT_EMAIL_VERIFICATION_SENT_VIEW = 'fix.views.CustomEmailVerificationSentView'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False

@@ -39,14 +39,8 @@
       <div class="grid-item-2 two-column-grid">
         <div class="form-group">
           <label for="id_first_name" class="label-class">First Name</label>
-          <input
-            type="text"
-            name="first_name"
-            id="id_first_name"
-            placeholder="Enter First Name"
-            class="input-class"
-            value="{{ form.first_name.value|default_if_none:'' }}"
-          />
+          <input type="text" name="first_name" id="id_first_name" placeholder="Enter First Name" class="input-class" value="{{ form.first_name.value|default_if_none:'' }}"
+           autocomplete="given-name"/>
           {% if form.first_name.errors %}
           <div class="error-message">{{ form.first_name.errors.0 }}</div>
           {% endif %}
@@ -54,14 +48,8 @@
 
         <div class="form-group">
           <label for="id_last_name" class="label-class">Last Name</label>
-          <input
-            type="text"
-            name="last_name"
-            id="id_last_name"
-            placeholder="Enter Last Name"
-            class="input-class"
-            value="{{ form.last_name.value|default_if_none:'' }}"
-          />
+          <input type="text" name="last_name" id="id_last_name" placeholder="Enter Last Name" class="input-class" value="{{ form.last_name.value|default_if_none:'' }}"
+          autocomplete="family-name"/>
           {% if form.last_name.errors %}
           <div class="error-message">{{ form.last_name.errors.0 }}</div>
           {% endif %}
@@ -70,14 +58,8 @@
 
       <div class="form-group">
         <label for="id_username" class="label-class">Username</label>
-        <input
-          type="text"
-          name="username"
-          id="id_username"
-          placeholder="Enter Username"
-          class="input-class"
-          value="{{ form.username.value|default_if_none:'' }}"
-        />
+        <input type="text" name="username" id="id_username" placeholder="Enter Username" class="input-class" value="{{ form.username.value|default_if_none:'' }}"
+        autocomplete="username"/>
         {% if form.username.errors %}
         <div class="error-message">{{ form.username.errors.0 }}</div>
         {% endif %}
@@ -85,14 +67,8 @@
 
       <div class="form-group">
         <label for="id_email" class="label-class">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="id_email"
-          placeholder="Enter Email"
-          class="input-class"
-          value="{{ form.email.value|default_if_none:'' }}"
-        />
+        <input type="email" name="email" id="id_email" placeholder="Enter Email" class="input-class" value="{{ form.email.value|default_if_none:'' }}"
+        autocomplete="email"/>
         {% if form.email.errors %}
         <div class="error-message">{{ form.email.errors.0 }}</div>
         {% endif %}
@@ -100,14 +76,8 @@
 
       <div class="form-group">
         <label for="id_apartment_number" class="label-class">Apartment Number</label>
-        <input
-          type="text"
-          name="apartment_number"
-          id="id_apartment_number"
-          placeholder="Enter Apartment Number"
-          class="input-class"
-          value="{{ form.apartment_number.value|default_if_none:'' }}"
-        />
+        <input type="text" name="apartment_number" id="id_apartment_number" placeholder="Enter Apartment Number" class="input-class" value="{{ form.apartment_number.value|default_if_none:'' }}"
+        autocomplete="off"/>
         {% if form.apartment_number.errors %}
         <div class="error-message">{{ form.apartment_number.errors.0 }}</div>
         {% endif %}
@@ -117,12 +87,7 @@
       <div class="form-group password-group">
         <label for="id_password1" class="label-class">Password</label>
         <div class="password-wrapper">
-          <input
-            type="password"
-            name="password1"
-            id="id_password1"
-            placeholder="Enter Password"
-            class="input-class"/>
+          <input type="password" name="password1" id="id_password1" placeholder="Enter Password" class="input-class"  autocomplete="new-password"/>
           <i class="fa-solid fa-eye toggle-password" data-target="id_password1"></i>
         </div>
         {% if form.password1.errors %}
@@ -138,7 +103,7 @@
             name="password2"
             id="id_password2"
             placeholder="Enter Confirm Password"
-            class="input-class"
+            class="input-class"  autocomplete="new-password"
           />
           <i class="fa-solid fa-eye toggle-password" data-target="id_password2"></i>
         </div>
