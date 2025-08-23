@@ -161,9 +161,16 @@ def sign_up_page(request):
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home')
     else:
-        form = ResidentRegistrationForm()
+        # 👇 Prefill form from query params if available
+        initial_data = {
+            "email": request.GET.get("email", ""),
+            "first_name": request.GET.get("first_name", ""),
+            "last_name": request.GET.get("last_name", "")
+        }
+        form = ResidentRegistrationForm(initial=initial_data)
 
     return render(request, 'sign-up.html', {"form": form})
+
 
 
 def contact_page(request):

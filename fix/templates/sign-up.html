@@ -148,7 +148,7 @@
       </div>
 
       <button type="submit" class="btn-auth">Sign Up Now</button>
-      <a href="{% provider_login_url 'google' %}" class="btn-google">Continue with Google</a>
+      <a href="{% provider_login_url 'google' process='signup' %}" class="btn-google">Continue with Google</a>
 
       <div class="form-footer">
         Already have an account? <a href="{% url 'login' %}">Log In</a>

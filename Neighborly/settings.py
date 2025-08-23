@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'django_extensions',
-    # 'crispy_forms',
-    # "crispy_bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -89,17 +87,19 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
+            'prompt':"select_account",
         }
     }
 }
 
 
 
-# CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-# CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 # Skip the account connection confirmation page
 SOCIALACCOUNT_LOGIN_ON_GET = True
-SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_AUTO_SIGNUP = False
+SOCIALACCOUNT_ADAPTER = "fix.adapters.MySocialAccountAdapter"
+
 # Database
 DATABASES = {
     'default': {
