@@ -124,10 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# ACCOUNT_SIGNUP_FORM_CLASS = 'fix.forms.CustomSocialSignupForm'
-# SOCIALACCOUNT_FORMS = {
-#     'signup': 'fix.forms.CustomSocialSignupForm',
-# }
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Karachi'
@@ -182,7 +178,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-# ACCOUNT_EMAIL_VERIFICATION_SENT_VIEW = 'fix.views.CustomEmailVerificationSentView'
+
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
